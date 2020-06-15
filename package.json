@@ -1,0 +1,41 @@
+{
+  "name": "react-web-track-player",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "private": false,
+  "author": {
+    "name": "Maycon Benito",
+    "email": "mayconbenito21@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mayconbenito/react-web-track-player.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react web player",
+    "react track player",
+    "react native track player"
+  ],
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
+  },
+  "devDependencies": {
+    "react-scripts": "3.4.1",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "2.5.0"
+  }
+}
