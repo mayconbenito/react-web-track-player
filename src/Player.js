@@ -167,7 +167,7 @@ function getPosition() {
   return playerContext.currentTime;
 }
 
-function getBufferedPostion() {
+function getBufferedPosition() {
   if (playerContext.buffered.length) {
     return playerContext.buffered.end(playerContext.buffered);
   }
@@ -233,7 +233,7 @@ export default {
   remove,
   getDuration,
   getPosition,
-  getBufferedPostion,
+  getBufferedPosition,
   getPlaybackState,
   getVolume,
   setVolume,
