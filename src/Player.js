@@ -66,7 +66,7 @@ async function play(position = 0) {
 
   isContextSet = true;
 
-  await playerContext.play();
+  playerContext.volume = globalVolume
 
   navigator.mediaSession.metadata = new window.MediaMetadata({
     title: activeTrack.title,
@@ -74,6 +74,8 @@ async function play(position = 0) {
     album: activeTrack.album,
     artwork: activeTrack.artwork,
   });
+
+  await playerContext.play();
 
   navigator.mediaSession.playbackState = 'playing';
 }
@@ -99,12 +101,11 @@ async function skipToNext() {
   if (currentTrackPosition < tracksQueue.length - 1) {
     activeTrack = tracksQueue[currentTrackPosition + 1];
     playerContext.currentTime = 0;
-    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
     playerContext = new Audio(activeTrack.url);
-    await playerContext.play();
+    playerContext.volume = globalVolume
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -112,6 +113,8 @@ async function skipToNext() {
       album: activeTrack.album,
       artwork: activeTrack.artwork,
     });
+
+    await playerContext.play();
   }
 }
 
@@ -127,13 +130,11 @@ async function skipToPrevious() {
   if (currentTrackPosition > 0) {
     activeTrack = tracksQueue[currentTrackPosition - 1];
     playerContext.currentTime = 0;
-    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
     playerContext = new Audio(activeTrack.url);
-    await playerContext.play();
-
+    playerContext.volume = globalVolume
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -141,6 +142,8 @@ async function skipToPrevious() {
       album: activeTrack.album,
       artwork: activeTrack.artwork,
     });
+
+    await playerContext.play();
   }
 }
 
@@ -152,12 +155,11 @@ async function skipToIndex(index) {
   if (index < tracksQueue.length) {
     activeTrack = tracksQueue[index];
     playerContext.currentTime = 0;
-    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
     playerContext = new Audio(activeTrack.url);
-    await playerContext.play();
+    playerContext.volume = globalVolume
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -165,6 +167,8 @@ async function skipToIndex(index) {
       album: activeTrack.album,
       artwork: activeTrack.artwork,
     });
+
+    await playerContext.play();
   }
 }
 
