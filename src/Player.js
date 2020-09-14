@@ -6,8 +6,38 @@ let activeTrack = null;
 let isContextSet = false;
 let actionHandlers = [];
 
+function listener() {
+  const customSetInterval = function(callback, timeout) {
+    const blob = new Blob([ `self.addEventListener('message', function(e) { \
+      let old_date = Date.now(); \
+      while (Date.now() - old_date <= ${  timeout  }) {}; \
+      self.postMessage(true); \
+    }, false);` ], { type: "text/javascript" });
+
+    const worker = new Worker(window.URL.createObjectURL(blob));
+    worker.addEventListener("message", function(e) {
+        if (callback() === false) {
+            return;
+        }
+        customSetInterval(callback, timeout);
+    }, false);
+    worker.postMessage(true);
+  };
+
+
+  customSetInterval(async () => {
+    const playbackState = getPlaybackState();
+    console.log(playbackState);
+    if (playbackState === 'STATE_STOPPED' && isContextSet) {
+      await skipToNext();
+    }
+  }, 1000);
+}
+
 function setupPlayer(options) {
   actionHandlers = options.capabilities;
+
+  listener()
 
   for (const [action, handler] of actionHandlers) {
     try {
