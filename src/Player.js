@@ -5,6 +5,7 @@ let tracksQueue = [];
 let activeTrack = null;
 let isContextSet = false;
 let actionHandlers = [];
+let globalVolume = 0;
 
 function listener() {
   const customSetInterval = function(callback, timeout) {
@@ -98,6 +99,7 @@ async function skipToNext() {
   if (currentTrackPosition < tracksQueue.length - 1) {
     activeTrack = tracksQueue[currentTrackPosition + 1];
     playerContext.currentTime = 0;
+    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
@@ -125,6 +127,7 @@ async function skipToPrevious() {
   if (currentTrackPosition > 0) {
     activeTrack = tracksQueue[currentTrackPosition - 1];
     playerContext.currentTime = 0;
+    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
@@ -149,6 +152,7 @@ async function skipToIndex(index) {
   if (index < tracksQueue.length) {
     activeTrack = tracksQueue[index];
     playerContext.currentTime = 0;
+    playerContext.volume = globalVolume
     playerContext.src = null;
     await playerContext.pause();
 
@@ -226,6 +230,7 @@ function getVolume() {
 
 function setVolume(volume) {
   playerContext.volume = volume;
+  globalVolume = volume
 }
 
 function seekTo(seconds) {
