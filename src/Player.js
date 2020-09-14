@@ -27,7 +27,6 @@ function listener() {
 
   customSetInterval(async () => {
     const playbackState = getPlaybackState();
-    console.log(playbackState);
     if (playbackState === 'STATE_STOPPED' && isContextSet) {
       await skipToNext();
     }
