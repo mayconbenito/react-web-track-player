@@ -1,50 +1,23 @@
-const playerId = 'react-web-track-player-id';
-let playerContext = document.getElementsByClassName(playerId);
-
 let tracksQueue = [];
 let activeTrack = null;
-let isContextSet = false;
+let isQueueSet = false;
+let loadingState = null;
 let actionHandlers = [];
 let globalVolume = 0;
 
-function listener() {
-  const customSetInterval = function(callback, timeout) {
-    const blob = new Blob([ `self.addEventListener('message', function(e) { \
-      let old_date = Date.now(); \
-      while (Date.now() - old_date <= ${  timeout  }) {}; \
-      self.postMessage(true); \
-    }, false);` ], { type: "text/javascript" });
-
-    const worker = new Worker(window.URL.createObjectURL(blob));
-    worker.addEventListener("message", function(e) {
-        if (callback() === false) {
-            return;
-        }
-        customSetInterval(callback, timeout);
-    }, false);
-    worker.postMessage(true);
-  };
-
-
-  customSetInterval(async () => {
-    const playbackState = getPlaybackState();
-    if (playbackState === 'STATE_STOPPED' && isContextSet) {
-      await skipToNext();
-    }
-  }, 1000);
-}
+const playerContext = new Audio();
 
 function setupPlayer(options) {
   actionHandlers = options.capabilities;
-
-  listener()
 
   for (const [action, handler] of actionHandlers) {
     try {
       navigator.mediaSession.setActionHandler(action, handler);
     } catch (error) {
       if (!process.env.NODE_ENV === 'development') {
-        console.log(`The media session action "${action}" is not supported yet.`);
+        console.log(
+          `The media session action "${action}" is not supported yet.`
+        );
       }
     }
   }
@@ -55,18 +28,17 @@ function add(tracks) {
 }
 
 async function play(position = 0) {
-  if (isContextSet) {
+  if (isQueueSet) {
     await playerContext.play();
     return;
   }
 
   activeTrack = tracksQueue[position];
-  playerContext = activeTrack && activeTrack.url && new Audio(activeTrack.url);
-  playerContext.className = playerId;
+  playerContext.src = activeTrack && activeTrack.url;
 
-  isContextSet = true;
+  isQueueSet = true;
 
-  playerContext.volume = globalVolume
+  playerContext.volume = globalVolume;
 
   navigator.mediaSession.metadata = new window.MediaMetadata({
     title: activeTrack.title,
@@ -86,6 +58,7 @@ function pause() {
   }
 
   playerContext.pause();
+
   navigator.mediaSession.playbackState = 'paused';
 }
 
@@ -95,17 +68,18 @@ async function skipToNext() {
   }
 
   const currentTrackPosition = tracksQueue.findIndex(
-    (track) => track.id === activeTrack.id,
+    (track) => track.id === activeTrack.id
   );
 
   if (currentTrackPosition < tracksQueue.length - 1) {
     activeTrack = tracksQueue[currentTrackPosition + 1];
-    playerContext.currentTime = 0;
     playerContext.src = null;
+    playerContext.currentTime = 0;
+
     await playerContext.pause();
 
-    playerContext = new Audio(activeTrack.url);
-    playerContext.volume = globalVolume
+    playerContext.src = activeTrack && activeTrack.url;
+    playerContext.volume = globalVolume;
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -124,17 +98,18 @@ async function skipToPrevious() {
   }
 
   const currentTrackPosition = tracksQueue.findIndex(
-    (track) => track.id === activeTrack.id,
+    (track) => track.id === activeTrack.id
   );
 
   if (currentTrackPosition > 0) {
     activeTrack = tracksQueue[currentTrackPosition - 1];
-    playerContext.currentTime = 0;
     playerContext.src = null;
+    playerContext.currentTime = 0;
+
     await playerContext.pause();
 
-    playerContext = new Audio(activeTrack.url);
-    playerContext.volume = globalVolume
+    playerContext.src = activeTrack && activeTrack.url;
+    playerContext.volume = globalVolume;
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -154,12 +129,13 @@ async function skipToIndex(index) {
 
   if (index < tracksQueue.length) {
     activeTrack = tracksQueue[index];
-    playerContext.currentTime = 0;
     playerContext.src = null;
+    playerContext.currentTime = 0;
+
     await playerContext.pause();
 
-    playerContext = new Audio(activeTrack.url);
-    playerContext.volume = globalVolume
+    playerContext.src = activeTrack && activeTrack.url;
+    playerContext.volume = globalVolume;
 
     navigator.mediaSession.metadata = new window.MediaMetadata({
       title: activeTrack.title,
@@ -217,12 +193,22 @@ function getPlaybackState() {
     return 'STATE_PLAYING';
   }
 
-  if (playerContext.paused && playerContext.currentTime !== playerContext.duration) {
+  if (
+    playerContext.paused &&
+    playerContext.currentTime !== playerContext.duration
+  ) {
     return 'STATE_PAUSED';
   }
 
-  if (playerContext.paused && playerContext.currentTime === playerContext.duration) {
+  if (
+    playerContext.paused &&
+    playerContext.currentTime === playerContext.duration
+  ) {
     return 'STATE_STOPPED';
+  }
+
+  if (loadingState === 'waiting' || loadingState === 'loadstart') {
+    return 'STATE_BUFFERING';
   }
 
   return 'STATE_NONE';
@@ -234,7 +220,7 @@ function getVolume() {
 
 function setVolume(volume) {
   playerContext.volume = volume;
-  globalVolume = volume
+  globalVolume = volume;
 }
 
 function seekTo(seconds) {
@@ -243,19 +229,29 @@ function seekTo(seconds) {
 
 function reset() {
   playerContext.src = null;
-  isContextSet = false;
+  isQueueSet = false;
   tracksQueue = [];
   activeTrack = null;
 }
 
 function destroy() {
-  playerContext = document.getElementsByClassName(playerId);
-
   tracksQueue = [];
   activeTrack = null;
-  isContextSet = false;
+  isQueueSet = false;
   actionHandlers = [];
 }
+
+playerContext.addEventListener('ended', async function () {
+  await skipToNext();
+});
+
+playerContext.addEventListener('waiting', async function () {
+  loadingState = 'waiting';
+});
+
+playerContext.addEventListener('loadstart', async function () {
+  loadingState = 'loadstart';
+});
 
 export default {
   setupPlayer,

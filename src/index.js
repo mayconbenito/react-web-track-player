@@ -1,7 +1,11 @@
-import Player from './Player';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-export { default as usePlaybackState } from './hooks/usePlaybackState';
-export { default as usePlaybackTrackChanged } from './hooks/usePlaybackTrackChanged';
-export { default as useTrackPlayerProgress } from './hooks/useTrackPlayerProgress';
+import App from './App';
 
-export default Player;
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);

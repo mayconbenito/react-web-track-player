@@ -1,12 +1,8 @@
-import {
-  useState,
-} from 'react';
+import { useState } from 'react';
 
 import player from '../Player';
 
-const useTrackPlayerProgress = (
-  interval = 1000,
-) => {
+const useTrackPlayerProgress = (interval = 1000) => {
   const initialState = {
     position: 0,
     bufferedPosition: 0,

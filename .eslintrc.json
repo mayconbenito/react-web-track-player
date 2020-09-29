@@ -3,15 +3,20 @@
     "browser": true,
     "es2020": true
   },
-  "extends": ["plugin:react/recommended", "airbnb"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 11,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "react/jsx-filename-extension": [
       "error",
@@ -21,6 +26,7 @@
     ],
     "import/prefer-default-export": "off",
     "no-restricted-syntax": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "func-names": "off"
   }
 }
