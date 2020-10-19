@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Player, {
   usePlaybackState,
   usePlaybackTrackChanged,
+  usePlayerQueue,
   useTrackPlayerProgress,
 } from './lib';
 
@@ -11,6 +12,7 @@ function App() {
   const { position, bufferedPosition, duration } = useTrackPlayerProgress();
   const currentTrack = usePlaybackTrackChanged();
   const playbackState = usePlaybackState();
+  const playerQueue = usePlayerQueue()
 
   useEffect(() => {
     const tracks = [
@@ -92,6 +94,10 @@ function App() {
   useEffect(() => {
     console.log(playbackState);
   }, [playbackState]);
+
+  useEffect(() => {
+    console.log(playerQueue);
+  }, [playerQueue]);
 
   useEffect(() => {
     console.log(position, bufferedPosition, duration);
