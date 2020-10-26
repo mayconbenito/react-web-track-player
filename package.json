@@ -1,6 +1,6 @@
 {
   "name": "react-web-track-player",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "src/lib/index.js",
   "private": false,
   "author": {
