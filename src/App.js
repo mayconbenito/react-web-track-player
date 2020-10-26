@@ -12,7 +12,7 @@ function App() {
   const { position, bufferedPosition, duration } = useTrackPlayerProgress();
   const currentTrack = usePlaybackTrackChanged();
   const playbackState = usePlaybackState();
-  const playerQueue = usePlayerQueue()
+  const playerQueue = usePlayerQueue();
 
   useEffect(() => {
     const tracks = [
@@ -127,7 +127,7 @@ function App() {
     <div className="container">
       <div className="player">
         <div className="player-info">
-          <h1>{currentTrack?.title}</h1>
+          <h1>{currentTrack && currentTrack.title}</h1>
           <span>
             {position}:{duration}
           </span>
