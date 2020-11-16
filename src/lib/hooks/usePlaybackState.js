@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import player from '../Player';
+import useInterval from './helpers/useInterval';
 
 const usePlaybackState = () => {
   const initialState = player.getPlaybackState();
@@ -13,7 +14,7 @@ const usePlaybackState = () => {
     setState(playbackState);
   };
 
-  setInterval(() => {
+  useInterval(() => {
     getProgress();
   }, 1000);
 

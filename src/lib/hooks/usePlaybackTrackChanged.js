@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import player from '../Player';
+import useInterval from './helpers/useInterval';
 
 const usePlaybackTrackChanged = () => {
   const initialState = player.getCurrentTrack();
@@ -15,7 +16,7 @@ const usePlaybackTrackChanged = () => {
     }
   };
 
-  setInterval(() => {
+  useInterval(() => {
     getCurrentTrack();
   }, 1000);
 

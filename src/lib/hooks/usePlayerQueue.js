@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import player from '../Player';
+import useInterval from './helpers/useInterval';
 
 const usePlayerQueue = () => {
   const [state, setState] = useState([]);
@@ -11,7 +12,7 @@ const usePlayerQueue = () => {
     setState(playerQueue);
   };
 
-  setInterval(() => {
+  useInterval(() => {
     getQueue();
   }, 1000);
 

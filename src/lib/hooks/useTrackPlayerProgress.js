@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import player from '../Player';
+import useInterval from './helpers/useInterval';
 
 const useTrackPlayerProgress = (intervalTime = 1000) => {
   const initialState = {
@@ -11,31 +12,27 @@ const useTrackPlayerProgress = (intervalTime = 1000) => {
 
   const [state, setState] = useState(initialState);
 
-  useEffect(() => {
-    const getProgress = () => {
-      if (player.getCurrentTrack()) {
-        const position = player.getPosition();
-        const bufferedPosition = player.getBufferedPosition();
-        const duration = player.getDuration();
+  const getProgress = () => {
+    if (player.getCurrentTrack()) {
+      const position = player.getPosition();
+      const bufferedPosition = player.getBufferedPosition();
+      const duration = player.getDuration();
 
-        const updatedProgress = { position, bufferedPosition, duration };
+      const updatedProgress = { position, bufferedPosition, duration };
 
-        if (JSON.stringify(state) !== JSON.stringify(updatedProgress)) {
-          setState(updatedProgress);
-        } else {
-          setState(initialState);
-        }
+      if (JSON.stringify(state) !== JSON.stringify(updatedProgress)) {
+        setState(updatedProgress);
       } else {
         setState(initialState);
       }
-    };
+    } else {
+      setState(initialState);
+    }
+  };
 
-    const interval = setInterval(() => {
-      getProgress();
-    }, intervalTime);
-
-    return () => interval.clearInterval();
-  }, []);
+  useInterval(() => {
+    getProgress();
+  }, intervalTime);
 
   return state;
 };
