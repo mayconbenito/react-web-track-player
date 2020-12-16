@@ -17,15 +17,15 @@ function App() {
   useEffect(() => {
     const tracks = [
       {
-        id: 1,
-        url: 'https://stmusic-streamer.herokuapp.com/yt?url=gOsM-DYAEhY',
-        title: 'Imagine Dragons - Whatever It Takes',
-        artist: 'Imagine Dragons',
-        album: 'Evolve',
+        id: 3,
+        url: 'https://streamer.stmusic.tk/yt?url=owTWCbq_nSk',
+        title: 'The Chainsmokers - Something Just Like This',
+        artist: 'The Chainsmokers',
+        album: 'Something Just Like This',
         artwork: [
           {
             src:
-              'https://res.cloudinary.com/hjkgnaiib/image/upload/v1581347748/images/e3bfdb293cd9697374084feccfd75741.png',
+              'https://res.cloudinary.com/hjkgnaiib/image/upload/v1604889298/images/941d1b73ab6a5e4882e2597448f4ebd1.png',
             sizes: '512x512',
             type: 'image/png',
           },
@@ -41,6 +41,21 @@ function App() {
           {
             src:
               'https://res.cloudinary.com/hjkgnaiib/image/upload/v1581347801/images/c91dcc6778ee2f0b43d7c983ea6a8832.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+      {
+        id: 1,
+        url: 'https://stmusic-streamer.herokuapp.com/yt?url=gOsM-DYAEhY',
+        title: 'Imagine Dragons - Whatever It Takes',
+        artist: 'Imagine Dragons',
+        album: 'Evolve',
+        artwork: [
+          {
+            src:
+              'https://res.cloudinary.com/hjkgnaiib/image/upload/v1581347748/images/e3bfdb293cd9697374084feccfd75741.png',
             sizes: '512x512',
             type: 'image/png',
           },

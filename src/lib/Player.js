@@ -245,12 +245,16 @@ playerContext.addEventListener('ended', async function () {
   await skipToNext();
 });
 
-playerContext.addEventListener('waiting', async function () {
+playerContext.addEventListener('waiting', function () {
   loadingState = 'waiting';
 });
 
-playerContext.addEventListener('loadstart', async function () {
+playerContext.addEventListener('loadstart', function () {
   loadingState = 'loadstart';
+});
+
+playerContext.addEventListener('error', async function () {
+  await skipToNext()
 });
 
 export default {
