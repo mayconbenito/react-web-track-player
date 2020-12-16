@@ -20,11 +20,7 @@ const useTrackPlayerProgress = (intervalTime = 1000) => {
 
       const updatedProgress = { position, bufferedPosition, duration };
 
-      if (JSON.stringify(state) !== JSON.stringify(updatedProgress)) {
-        setState(updatedProgress);
-      } else {
-        setState(initialState);
-      }
+      setState(updatedProgress);
     } else {
       setState(initialState);
     }
